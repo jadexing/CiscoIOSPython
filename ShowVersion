@@ -1,0 +1,46 @@
+#This scripts does a "Show Version."
+
+import paramiko
+
+# User credentials
+username = ''  # Replace with your username
+password = ''  # Replace with your password
+ip_address = ''  # Replace with the target device's IP address
+
+# Initialize SSH client
+ssh_client = paramiko.SSHClient()
+ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add the host key
+
+try:
+    print(f"Connecting to {ip_address}...")
+    ssh_client.connect(hostname=ip_address, username=username, password=password, port=22, timeout=10, allow_agent=False, look_for_keys=False)
+    print("Connection successful!")
+
+    # Run the 'show version' command
+    stdin, stdout, stderr = ssh_client.exec_command('show version')
+    version_info = stdout.read().decode().strip()
+    error_output = stderr.read().decode().strip()
+
+    if error_output:
+        print(f"Error while getting version info: {error_output}")
+    else:
+        print(f"Version Info:\n{version_info}")
+
+        # Split the output into lines and check for the Model Number line
+        for line in version_info.splitlines():
+            if "Model Number" in line:
+                # Extract the model number from the line
+                switch_model = line.split(":")[-1].strip()  # Take everything after the colon and strip whitespace
+                print(f"Switch Model Number: {switch_model}")
+                break  # Exit the loop after finding the model number
+        else:
+            print("Switch model number not found.")
+
+except paramiko.AuthenticationException:
+    print("Authentication failed. Please check your username and password.")
+except paramiko.SSHException as ssh_exception:
+    print(f"Unable to connect to {ip_address}: {ssh_exception}")
+except Exception as e:
+    print(f"Failed to connect to {ip_address}: {e}")
+finally:
+    ssh_client.close()  # Ensure the connection is closed
