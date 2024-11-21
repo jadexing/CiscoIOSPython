@@ -1,0 +1,42 @@
+"""
+This code is designed to connect to a Cisco IOS device, retrieve the hostname from the device's running configuration, and print the results. However, due to the break statement, the loop will exit after the first iteration. Here's a detailed breakdown of what each part of the code does:
+Import Library: It imports the netmiko library, which is used for network device communication.
+Initialize Variables: It initializes the variable last_octet to 1. This variable will be used to iterate through the last octet of the IP addresses.
+While Loop: It enters a while loop that continues as long as last_octet is less than or equal to 3.
+Skip First Iteration and Exit Loop: If last_octet is 1, it increments last_octet by 1 and prints a message indicating that the loop exited with a break statement. The break statement then exits the loop, so the rest of the code inside the loop will not be executed.
+Construct IP Address: If the loop were to continue, it would construct the IP address by concatenating the base IP 10.254.0. with the current value of last_octet.
+Connect to Device: It would establish a connection to the Cisco IOS device at the constructed IP address using the provided credentials (username and password).
+Retrieve Hostname: It would send the command show run | include hostname to the device to retrieve the hostname from the running configuration and print the result.
+Print Separator: It would print a separator line of 20 underscores to visually separate the output for each device.
+Increment Last Octet: It would increment last_octet by 1 and repeat the process for the next IP address.
+In summary, due to the break statement, the loop exits after the first iteration, and the code to connect to the device and retrieve the hostname is not executed. 
+
+"""
+
+import netmiko
+
+last_octet = 1
+while last_octet <= 3:
+    if last_octet == 1:
+        last_octet += 1
+        #continue
+        print('While loop exited with break statement')
+        break
+
+    ip_address = '10.254.0.' + str(last_octet)
+    #print(ip_address)
+    
+    net_connect = netmiko.ConnectHandler(
+        ip=ip_address,
+        device_type='cisco_ios',
+        username='cisco',
+        password='cisco'
+    )
+    
+    # Send the 'show run | include hostname' command and print the result
+    print(net_connect.send_command('show run | include hostname'))
+    
+    # Print a separator
+    print('_' * 20)
+    
+    last_octet += 1
