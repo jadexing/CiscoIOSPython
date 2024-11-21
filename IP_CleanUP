@@ -1,0 +1,25 @@
+"""
+This code is designed to remove duplicate IP addresses from a list and then print the unique IP addresses in sorted order. Here's a step-by-step explanation of what the code does:
+Import Library: It imports the netmiko library, although it is not used in this specific code snippet.
+Define IP Addresses: It defines a list of IP addresses, ip_addrs, which contains some duplicate entries.
+Remove Duplicates: It converts the list of IP addresses into a set, ip_addrs_unique, which automatically removes any duplicate entries because sets do not allow duplicates.
+Sort and Print: It sorts the unique IP addresses and prints them in ascending order.
+In summary, this code takes a list of IP addresses, removes any duplicates, and prints the unique IP addresses in sorted order.
+"""
+
+import netmiko 
+ 
+ip_addrs = [ 
+    '10.254.0.1', 
+    '10.254.0.2', 
+    '10.254.0.1', 
+    '10.254.0.3', 
+    '10.254.0.2', 
+    '10.254.0.3', 
+    '10.254.0.3', 
+    '10.254.0.2', 
+    '10.254.0.3', 
+]
+
+ip_addrs_unique = set(ip_addrs)
+print(sorted(ip_addrs_unique))
