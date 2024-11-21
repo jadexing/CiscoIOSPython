@@ -1,0 +1,40 @@
+"""
+This code is designed to connect to multiple Cisco IOS devices, retrieve the hostname from each device's running configuration, and print the results. Here's a detailed breakdown of what each part of the code does:
+Import Library: It imports the netmiko library, which is used for network device communication.
+Initialize Variables: It initializes the variable last_octet to 1. This variable will be used to iterate through the last octet of the IP addresses.
+While Loop: It enters a while loop that continues as long as last_octet is less than or equal to 3.
+Skip First Iteration: If last_octet is 1, it increments last_octet by 1 and continues to the next iteration, effectively skipping the first IP address (10.254.0.1).
+Construct IP Address: It constructs the IP address by concatenating the base IP 10.254.0. with the current value of last_octet.
+Connect to Device: It establishes a connection to the Cisco IOS device at the constructed IP address using the provided credentials (username and password).
+Retrieve Hostname: It sends the command show run | include hostname to the device to retrieve the hostname from the running configuration and prints the result.
+Print Separator: It prints a separator line of 20 underscores to visually separate the output for each device.
+Increment Last Octet: It increments last_octet by 1 and repeats the process for the next IP address.
+In summary, this code connects to Cisco IOS devices with IP addresses 10.254.0.2 and 10.254.0.3, retrieves their hostnames, and prints the results with separators between each device's output.
+
+"""
+
+import netmiko
+
+last_octet = 1
+while last_octet <= 3:
+    if last_octet == 1:
+        last_octet += 1
+        continue
+
+    ip_address = '10.254.0.' + str(last_octet)
+    #print(ip_address)
+    
+    net_connect = netmiko.ConnectHandler(
+        ip=ip_address,
+        device_type='cisco_ios',
+        username='cisco',
+        password='cisco'
+    )
+    
+    # Send the 'show run | include hostname' command and print the result
+    print(net_connect.send_command('show run | include hostname'))
+    
+    # Print a separator
+    print('_' * 20)
+    
+    last_octet += 1
