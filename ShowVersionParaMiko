@@ -15,6 +15,8 @@ paramiko.SSHException for SSH-related errors.
 General exceptions for any other errors.
 Close Connection: Finally, it ensures that the SSH connection is closed, regardless of whether an exception occurred.
 
+FSM Module in NetMiko. Curt Buyers- note on someone that does this code.
+
 In summary, this code connects to a network device via SSH, retrieves and prints the device's version information, and extracts the model number from the output.
 """
 
