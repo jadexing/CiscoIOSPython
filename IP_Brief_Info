@@ -1,0 +1,39 @@
+"""
+This code is designed to connect to multiple Cisco IOS devices, retrieve the IP interface brief information from each device, and print the results. Here's a detailed breakdown of what each part of the code does:
+Import Library: It imports the netmiko library, which is used for network device communication.
+Define IP Addresses: It defines a list ip_list containing the IP addresses of the target devices.
+Define Credentials: It sets up the username, password, device type, and port for connecting to the devices.
+Initialize Output List: It initializes an empty list output_list to store the results.
+Iterate Through IP Addresses: It loops through each IP address in the ip_list.
+Establish Connection: For each IP address, it establishes a connection to the device using the provided credentials and connection details.
+Retrieve IP Interface Brief: It sends the command show ip interface brief to the device to retrieve the IP interface brief information and stores the result in the output variable.
+Store Results: It appends the output to the output_list.
+Print Results: After collecting the results from all devices, it iterates through the output_list and prints each output.
+In summary, this code connects to multiple Cisco IOS devices, retrieves the IP interface brief information from each device, and prints the results.
+"""
+
+
+import netmiko
+
+ip_list = [
+    '10.254.0.1',
+    '10.254.0.2',
+    '10.254.0.3',
+]
+#print(ip_list[0])
+#print(ip_list[-1])
+
+username = 'cisco' 
+password = 'cisco' 
+device_type = 'cisco_ios' 
+port = 22 
+    
+output_list = []   
+for ip in ip_list:
+    net_connect = netmiko.ConnectHandler(ip=ip, device_type=device_type, 
+        username=username, password=password, port=port)
+    output = net_connect.send_command('show ip interface brief')
+    output_list.append(output)
+
+for output in output_list:
+    print(output)
