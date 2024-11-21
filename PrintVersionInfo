@@ -1,0 +1,58 @@
+"""
+This code is designed to connect to a network switch using SSH, execute the show version command to retrieve version information, and handle any potential errors during the process. Here's a detailed breakdown of what each part of the code does:
+Import Libraries: It imports the paramiko library for SSH communication, the pprint library for pretty-printing output, the time library for time-related functions, and the re library for regular expression operations.
+User Credentials: It sets up placeholders for the username, password, and IP address of the target device. These should be replaced with actual values.
+Initialize SSH Client: It initializes an SSH client and sets the policy to automatically add the host key if it's missing.
+Connect to Device: Inside a try block, it attempts to connect to the device using the provided credentials and IP address. If the connection is successful, it prints a confirmation message.
+Execute Command: It runs the show version command on the device to retrieve version information. The output is read and decoded into a string.
+Error Handling: If there's any error output from the command, it prints the error message. Otherwise, it prints the version information.
+Exception Handling: It handles various exceptions:
+paramiko.AuthenticationException for authentication failures.
+paramiko.SSHException for SSH-related errors.
+General exceptions for any other errors.
+Close Connection: Finally, it ensures that the SSH connection is closed, regardless of whether an exception occurred.
+
+In summary, this code connects to a network switch via SSH, retrieves and prints the device's version information, and handles any errors that may occur during the process.
+"""
+
+
+#This logs in and does a show ver of the switchstack for an IP address.
+
+
+import paramiko
+import pprint
+import time
+import re  # Import regular expressions for parsing
+
+# User credentials
+username = ''  # Replace with your username
+password = ''    # Replace with your password
+ip_address = ''    # Replace with the target device's IP address
+
+# Initialize SSH client
+ssh_client = paramiko.SSHClient()
+ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add the host key
+
+try:
+    print(f"Connecting to {ip_address}...")
+    ssh_client.connect(hostname=ip_address, username=username, password=password, port=22, timeout=10, allow_agent=False, look_for_keys=False)
+    print("Connection successful!")
+
+    # Run the 'show version' command
+    stdin, stdout, stderr = ssh_client.exec_command('show version')
+    version_info = stdout.read().decode().strip()
+    error_output = stderr.read().decode().strip()
+
+    if error_output:
+        print(f"Error while getting version info: {error_output}")
+    else:
+        print(f"Version Info:\n{version_info}")
+
+except paramiko.AuthenticationException:
+    print("Authentication failed. Please check your username and password.")
+except paramiko.SSHException as ssh_exception:
+    print(f"Unable to connect to {ip_address}: {ssh_exception}")
+except Exception as e:
+    print(f"Failed to connect to {ip_address}: {e}")
+finally:
+    ssh_client.close()  # Ensure the connection is closed
