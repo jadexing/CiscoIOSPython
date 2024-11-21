@@ -1,0 +1,32 @@
+"""
+This code is designed to connect to a Cisco IOS device, retrieve the ARP table, extract MAC addresses, and convert the notation of the first MAC address. Here's a detailed breakdown of what each part of the code does:
+Import Libraries: It imports the netmiko library for network device communication, the re library for regular expression operations, and a custom module change_mac_notation.
+Device Connection Details: It sets up the connection details for the Cisco IOS device, including the IP address, username, password, device type, and port.
+Connect to Device: It establishes a connection to the Cisco IOS device using the provided credentials and connection details.
+Retrieve ARP Table: It sends the show arp command to the device to retrieve the ARP table and stores the output in the show_arp variable.
+Extract MAC Addresses: It uses a regular expression to find all MAC addresses in the ARP table that match the pattern xxxx.xxxx.xxxx and stores them in the mac_list variable.
+Convert MAC Address Notation: It uses the change_mac_notation.change_notation function to convert the notation of the first MAC address in the mac_list to use colons (:) instead of dots (.) and prints the result.
+In summary, this code connects to a Cisco IOS device, retrieves the ARP table, extracts MAC addresses, and converts the notation of the first MAC address to use colons.
+"""
+#Toggle on the last line between colons or dashes
+
+import re
+import netmiko
+import change_mac_notation
+
+ip = '10.254.0.1'
+username = 'cisco'
+password = 'cisco'
+device_type = 'cisco_ios'
+port = '22'
+
+net_connect = netmiko.ConnectHandler(ip=ip, device_type=device_type,
+    username=username, password=password, port=port)
+show_arp = net_connect.send_command('show arp')
+#print(show_arp)
+
+mac_list = re.findall(r'((?:[0-9a-f]{4}\.){2}[0-9a-f]{4})', show_arp)
+#print(mac_list)
+
+print(change_mac_notation.change_notation(mac_list[0], ':'))
+
