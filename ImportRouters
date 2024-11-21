@@ -1,0 +1,16 @@
+"""
+This code is designed to iterate through a list of router credentials and print the IP interface brief information for each router. Here's a detailed breakdown of what each part of the code does:
+Import Module: It imports the routers module, which presumably contains the necessary functions and data for handling router credentials and commands.
+Iterate Through Routers: It loops through each router in the routers.creds list. This list likely contains dictionaries with the credentials and connection details for each router.
+Print IP Interface Brief: For each router, it calls the routers.get_ip_int_br function, passing the router's credentials using the **router syntax to unpack the dictionary. This function presumably connects to the router and retrieves the IP interface brief information. The result is then printed.
+Print Separator: After printing the IP interface brief information for each router, it prints a line of 80 dashes to separate the output for each router.
+In summary, this code connects to multiple routers using their credentials, retrieves the IP interface brief information for each router, and prints the information with a separator line between each router's output.
+
+"""
+
+
+import routers
+
+for router in routers.creds:
+    print(routers.get_ip_int_br(**router))
+    print('-' * 80)
