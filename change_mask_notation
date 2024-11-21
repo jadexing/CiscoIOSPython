@@ -1,0 +1,46 @@
+"""
+This code is designed to convert a subnet mask into its corresponding CIDR (Classless Inter-Domain Routing) notation and then print the IP address along with the CIDR notation. Here's a step-by-step explanation of what the code does:
+
+Define IP and Subnet: It sets the IP address to 192.168.0.1 and the subnet mask to 255.255.255.252.
+
+Check Subnet Mask: It checks the last octet of the subnet mask to determine the corresponding CIDR notation:
+
+If the subnet mask ends with .0, it sets the CIDR notation to /24.
+If the subnet mask ends with .128, it sets the CIDR notation to /25.
+If the subnet mask ends with .192, it sets the CIDR notation to /26.
+If the subnet mask ends with .224, it sets the CIDR notation to /27.
+If the subnet mask ends with .240, it sets the CIDR notation to /28.
+If the subnet mask ends with .248, it sets the CIDR notation to /29.
+If the subnet mask ends with .252, it sets the CIDR notation to /30.
+If the subnet mask ends with .255, it sets the CIDR notation to /32.
+If none of these conditions are met, it prints a message indicating that the subnet slash notation could not be determined.
+Print IP with CIDR Notation: Finally, it prints the IP address along with the determined CIDR notation.
+
+In this specific case, since the subnet mask is 255.255.255.252, the code will set the CIDR notation to /30 and print 192.168.0.1/30.
+"""
+
+ip = '192.168.0.1'
+subnet = '255.255.255.252'
+
+if subnet.endswith('.0'):
+    subnet_slash_notation = '/24'
+#   print(ip + subnet_slash_notation)
+elif subnet.endswith('.128'):
+    subnet_slash_notation = '/25'
+elif subnet.endswith('.192'):
+    subnet_slash_notation = '/26'
+elif subnet.endswith('.224'):
+    subnet_slash_notation = '/27'
+elif subnet.endswith('.240'):
+    subnet_slash_notation = '/28'
+elif subnet.endswith('.248'):
+    subnet_slash_notation = '/29'
+elif subnet.endswith('.252'):
+    subnet_slash_notation = '/30'
+elif subnet.endswith('.255'):
+    subnet_slash_notation = '/32'
+else:
+    print('Subnet slash notation could not be determined.')
+
+print(ip + subnet_slash_notation)
+
