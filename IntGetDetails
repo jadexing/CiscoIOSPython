@@ -1,0 +1,29 @@
+"""
+This code is designed to connect to a Cisco IOS device, retrieve the IP interface brief information, and extract the configuration details of the GigabitEthernet1 interface. Here's a detailed breakdown of what each part of the code does:
+Import Libraries: It imports the netmiko library for network device communication and the re library for regular expression operations.
+Device Connection Details: It sets up the connection details for the Cisco IOS device, including the IP address, username, password, device type, and port.
+Connect to Device: It establishes a connection to the Cisco IOS device using the provided credentials and connection details.
+Retrieve IP Interface Brief: It sends the show ip interface brief command to the device to retrieve the IP interface brief information and stores it in the csr1kv1_ip_int_br variable.
+Regular Expression Pattern: It defines a regular expression pattern to match the configuration details of the GigabitEthernet1 interface.
+Extract Configuration Details: It uses the re.search function to search for the GigabitEthernet1 interface configuration details in the IP interface brief information. If found, it prints the matched configuration details.
+"""
+
+ip = '10.254.0.1'
+username = 'cisco'
+password = 'cisco'
+device_type = 'cisco_ios'
+port = '22'
+
+net_connect = netmiko.ConnectHandler(ip=ip, device_type=device_type,
+    username=username, password=password, port=port)
+csr1kv1_ip_int_br = net_connect.send_command('show ip interface brief')
+
+#ip_addr = re.search(r'\w+\s+([\d\.]+)', csr1kv1_ip_int_br)
+#print(ip_addr.group(1))
+
+#ip_addr = re.findall(r'\w+\s+([\d\.]+)', csr1kv1_ip_int_br)
+#print(ip_addr)
+
+re_pattern = r'(GigabitEthernet1.*)'
+gigabit_ethernet_1 = re.search(re_pattern, csr1kv1_ip_int_br)
+print(gigabit_ethernet_1.group(1))
