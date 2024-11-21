@@ -1,0 +1,31 @@
+"""T
+his code is designed to connect to a Cisco IOS device, retrieve its running configuration, 
+modify a specific part of the configuration, and save the updated configuration to a file. 
+Here's a step-by-step explanation of what the code does:
+Import Libraries: It imports the netmiko library for network device communication and the re library for regular expression operations.
+Connect to Device: It establishes a connection to a Cisco IOS device with the IP address 10.254.0.1 using the provided username and password.
+Retrieve Running Configuration: It sends the show run command to the device to retrieve the running configuration and stores it in the running_config variable.
+Define Pattern: It defines a regular expression pattern to match the configuration of the GigabitEthernet1 interface.
+Update Configuration: It uses the re.sub function to replace the matched pattern in the running configuration with a new configuration (the replacement string repl is commented out in the code).
+Print Running Configuration: It prints the original running configuration (the print statement is commented out).
+Save Updated Configuration: It writes the updated configuration to a file named csr1kv1.cfg.
+In summary, this code connects to a Cisco IOS device, retrieves its running configuration, 
+modifies the configuration of the GigabitEthernet1 interface, and saves the updated configuration to a file.
+"""
+
+import netmiko
+import re
+
+csr = netmiko.ConnectHandler('10.254.0.1', username='cisco',
+   password='cisco', device_type='cisco_ios')
+
+running_config = csr.send_command('show run') 
+#print(running_config)
+
+pattern = r'interface GigabitEthernet1\n.*'
+#repl = 'interface GigabitEthernet1\n ip address 10.11.0.1 255.255.255.0'
+updated_config = re.sub(pattern, repl, running_config)
+print(running_config)
+
+with open('csr1kv1.cfg', 'w') as config_file:
+    print(updated_config, file=config_file)
